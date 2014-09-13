@@ -51,11 +51,17 @@ public class Config(props: Properties) {
         public val logSmtpSessions: Boolean = props.getBoolean("jtalks.pochta.log.smtpSessions");
     }
 
-    class MailboxConfig(val id: Int, val name : String, val login: String, val password: String, val size: Int) {
+    class MailboxConfig(val id: Int, val name : String, val login: String, val password: String, val size: Int,
+                        val storage: Mailboxes.Storage) {
         val loginEscaped = URLEncoder.encode(login, StandardCharsets.UTF_8.toString())
     }
 
     class Mailboxes(props: Properties) : Iterable<MailboxConfig> {
+
+        public enum class Storage {
+            MEMORY
+            FS
+        }
 
         private val mailboxes = ArrayList<MailboxConfig>();
 
@@ -65,7 +71,9 @@ public class Config(props: Properties) {
                 val login = props.getString("jtalks.pochta.mailbox.$mbox.login")
                 val password = props.getString("jtalks.pochta.mailbox.$mbox.password")
                 val size = props.getString("jtalks.pochta.mailbox.$mbox.size")
-                mailboxes.add(MailboxConfig(i++, mbox, login, password, Integer.parseInt(size)))
+                val storage = props.getString("jtalks.pochta.mailbox.$mbox.storage")
+                mailboxes.add(MailboxConfig(i++, mbox, login, password, Integer.parseInt(size),
+                        Storage.valueOf(storage.toUpperCase())))
             }
         }
 

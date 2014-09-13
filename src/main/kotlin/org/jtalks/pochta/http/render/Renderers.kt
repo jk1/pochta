@@ -6,6 +6,7 @@ import org.jtalks.pochta.http.FingerprintCache
 import com.floreysoft.jmte.NamedRenderer
 import com.floreysoft.jmte.RenderFormatInfo
 import java.util.Locale
+import java.nio.charset.StandardCharsets
 
 /**
  * User-supplied html templates variable need escaping to prevent
@@ -25,7 +26,7 @@ object HtmlEscapeRenderer : AbstractBaseRenderer("htmlEscape") {
  */
 object UrlEncodeRenderer : AbstractBaseRenderer("urlEncode") {
 
-    override fun render(data: String) = URLEncoder.encode(data.toString())!!
+    override fun render(data: String) = URLEncoder.encode(data.toString(), StandardCharsets.UTF_8.toString())
 }
 
 /**
@@ -37,7 +38,7 @@ object UrlEncodeRenderer : AbstractBaseRenderer("urlEncode") {
  */
 object FingerprintedRenderer : AbstractBaseRenderer("fingerprint") {
 
-    override fun render(data: String) = "$data${FingerprintCache.get(data)}"
+    override fun render(data: String) = "$data${FingerprintCache[data]}"
 }
 
 abstract class AbstractBaseRenderer(val keyword: String) : NamedRenderer {

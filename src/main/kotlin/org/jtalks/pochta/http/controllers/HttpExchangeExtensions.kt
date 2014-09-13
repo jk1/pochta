@@ -39,4 +39,4 @@ fun HttpExchange.writeResponse(code: Int) {
 /**
  * REST-like convention: id is the last element in the path
  */
-fun HttpExchange.getRequestedId() = Integer.parseInt(getRequestURI()!!.getPath().toString().split('/').last())
+fun HttpExchange.getRequestedId() = getRequestURI()!!.getPath().toString().split('/').last()

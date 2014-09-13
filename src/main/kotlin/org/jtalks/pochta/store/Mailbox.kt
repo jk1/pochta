@@ -9,7 +9,5 @@ public trait Mailbox : Iterable<Email>{
 
     fun add(message: Email) : Unit
 
-    fun byId(id : Int) : Email?
-
-    fun size() : Int
+    fun byId(id : String) : Email?
 }

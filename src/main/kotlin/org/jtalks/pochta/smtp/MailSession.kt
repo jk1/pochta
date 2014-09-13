@@ -2,7 +2,6 @@ package org.jtalks.pochta.smtp
 
 import org.subethamail.smtp.MessageHandler
 import java.util.Date
-import java.util.ArrayList
 import org.subethamail.smtp.MessageContext
 import javax.mail.internet.MimeMessage
 import java.io.InputStream
@@ -12,6 +11,8 @@ import java.io.ByteArrayOutputStream
 import java.util.concurrent.atomic.AtomicInteger
 import org.jtalks.pochta.store.Email
 import org.jtalks.pochta.store.MailStore
+import java.util.ArrayList
+import java.util.UUID
 
 /**
  *  Represents a single mail transfer conversation. This includes email itself,
@@ -20,10 +21,10 @@ import org.jtalks.pochta.store.MailStore
  */
 public class MailSession(val context: MessageContext?, val store: MailStore) : MessageHandler, Email {
 
-    override val id = IdGenerator.next()
+    override val id = UUID.randomUUID().toString()
     override var receivedDate: Date? = null
     override var envelopeFrom: String? = null
-    override var envelopeRecipients = ArrayList<String>()
+    override var envelopeRecipients: MutableList<String> = ArrayList()
     override var message: MimeMessage? = null
     override val ip = context?.getRemoteAddress().toString()
     override var subject: String? = null
@@ -44,20 +45,5 @@ public class MailSession(val context: MessageContext?, val store: MailStore) : M
     override fun done() {
         receivedDate = Date()
         store.byContextPassword()?.add(this)
-    }
-
-    override fun getRawMessage(): String {
-        val stream = ByteArrayOutputStream()
-        message?.writeTo(stream)
-        return String(stream.toByteArray())
-    }
-
-    /**
-     * Generates unique ids for incoming mails
-     */
-    object IdGenerator{
-        val counter = AtomicInteger()
-
-        fun next() = counter.incrementAndGet()
     }
 }
