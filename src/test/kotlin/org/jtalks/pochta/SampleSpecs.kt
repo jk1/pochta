@@ -1,12 +1,11 @@
+package org.jtalks.pochta
+
 import kotlin.test.assertEquals
-import org.jtalks.pochta.http.filters.TokenAuthenticationFilter
-import org.jtalks.pochta.config.Config
-import java.util.Properties
 import org.jetbrains.spek.api.Spek
 
-public class SampleSpecs : Spek() {{
+class SampleSpecs : Spek() {{
 
-    given("A string with default locale settings") {
+    given("a string with default locale settings") {
         val string = "OloLo"
         on("lowercasing") {
             val value = string.toLowerCase()
